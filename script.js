@@ -1,17 +1,15 @@
+// ===== MATRIX BACKGROUND =====
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
 
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
-const letters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const letters = "01ABCDEF";
 const fontSize = 14;
 const columns = canvas.width / fontSize;
 
-const drops = [];
-
-for (let x = 0; x < columns; x++)
-  drops[x] = 1;
+const drops = Array(Math.floor(columns)).fill(1);
 
 function drawMatrix() {
   ctx.fillStyle = "rgba(0,0,0,0.05)";
@@ -33,32 +31,52 @@ function drawMatrix() {
 
 setInterval(drawMatrix, 33);
 
-// ================= TERMINAL =================
+// ===== LOGIN SYSTEM =====
+const passwordInput = document.getElementById("passwordInput");
+const lockScreen = document.getElementById("lockScreen");
+const mainUI = document.getElementById("mainUI");
 
+const PASSWORD = "1337"; // ← اینو عوض کن 😏
+
+passwordInput.addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    if (passwordInput.value === PASSWORD) {
+      lockScreen.style.display = "none";
+      mainUI.classList.remove("hidden");
+      boot();
+    } else {
+      passwordInput.value = "";
+      alert("ACCESS DENIED 💀");
+    }
+  }
+});
+
+// ===== TERMINAL =====
 const terminal = document.getElementById("terminal");
 const input = document.getElementById("commandInput");
 
-const boot = [
-  "Booting system...",
-  "Injecting protocols...",
-  "Bypassing security...",
-  "Access granted ✔",
-  "Welcome, Mahan 💀"
-];
+function boot() {
+  const lines = [
+    "Booting system...",
+    "Decrypting modules...",
+    "Access granted ✔",
+    "Welcome, Mahan 💀",
+    "Type 'help'"
+  ];
 
-let i = 0;
+  let i = 0;
 
-function bootSequence() {
-  if (i < boot.length) {
-    terminal.innerHTML += boot[i] + "\n";
-    i++;
-    setTimeout(bootSequence, 600);
+  function next() {
+    if (i < lines.length) {
+      terminal.innerHTML += lines[i] + "\n";
+      i++;
+      setTimeout(next, 500);
+    }
   }
+
+  next();
 }
 
-bootSequence();
-
-// commands
 input.addEventListener("keydown", function(e) {
   if (e.key === "Enter") {
     let cmd = input.value.trim().toLowerCase();
@@ -67,26 +85,26 @@ input.addEventListener("keydown", function(e) {
 
     switch(cmd) {
       case "help":
-        terminal.innerHTML += "\nhelp, about, hack, glitch, clear";
+        terminal.innerHTML += "\nhelp, about, hack, glitch, secret";
         break;
 
       case "about":
-        terminal.innerHTML += "\nMahan | Cyber Security Mode 💀";
+        terminal.innerHTML += "\nMahan | Elite Mode 💀";
         break;
 
       case "hack":
-        fakeHack();
+        hackEffect();
         break;
 
       case "glitch":
         document.body.classList.add("glitch");
         setTimeout(() => {
           document.body.classList.remove("glitch");
-        }, 1000);
+        }, 800);
         break;
 
-      case "clear":
-        terminal.innerHTML = "";
+      case "secret":
+        terminal.innerHTML += "\nHidden message unlocked 🔓";
         break;
 
       default:
@@ -97,23 +115,23 @@ input.addEventListener("keydown", function(e) {
   }
 });
 
-function fakeHack() {
+function hackEffect() {
   const lines = [
-    "Accessing root...",
-    "Decrypting...",
-    "Uploading virus...",
-    "System breached 💀"
+    "Connecting...",
+    "Injecting...",
+    "Breaching system...",
+    "DONE 💀"
   ];
 
-  let x = 0;
+  let i = 0;
 
   function next() {
-    if (x < lines.length) {
-      terminal.innerHTML += "\n" + lines[x];
-      x++;
-      setTimeout(next, 500);
+    if (i < lines.length) {
+      terminal.innerHTML += "\n" + lines[i];
+      i++;
+      setTimeout(next, 400);
     }
   }
 
   next();
-}
+    }
