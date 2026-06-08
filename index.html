@@ -1,29 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>SECURE ACCESS</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>SECURE NODE</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <canvas id="matrix"></canvas>
 
-<!-- صفحه لاگین -->
-<div id="lockScreen">
-  <h2>ENTER PASSWORD</h2>
-  <input type="password" id="passwordInput" />
+<!-- LOADING -->
+<div id="loading">INITIALIZING...</div>
+
+<!-- LOGIN -->
+<div id="login">
+  <h2>ACCESS LEVEL 1</h2>
+  <input type="password" id="pass" placeholder="Password">
 </div>
 
-<!-- ترمینال -->
-<div class="overlay hidden" id="mainUI">
-  <div id="terminal"></div>
+<!-- SECOND STEP -->
+<div id="stage2" class="hidden">
+  <h2>ENTER ACCESS CODE</h2>
+  <input type="text" id="code" placeholder="Code">
+</div>
 
+<!-- TERMINAL -->
+<div id="main" class="hidden">
+  <div id="terminal"></div>
   <div id="input-line">
     <span>> </span>
-    <input type="text" id="commandInput" />
+    <input id="cmd" autocomplete="off">
   </div>
 </div>
+
+<audio id="typeSound" src="type.mp3"></audio>
 
 <script src="script.js"></script>
 </body>
