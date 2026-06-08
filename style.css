@@ -1,77 +1,66 @@
 body {
-  margin: 0;
-  overflow: hidden;
+  margin:0;
+  background:black;
+  color:#00ff00;
   font-family: monospace;
-  color: #00ff00;
+  overflow:hidden;
 }
 
-/* ماتریکس */
 #matrix {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: black;
-  z-index: 0;
+  position:fixed;
+  width:100%;
+  height:100%;
+  z-index:0;
 }
 
-/* لاگین */
-#lockScreen {
-  position: absolute;
-  z-index: 2;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: black;
+#loading {
+  position:absolute;
+  width:100%;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:2;
 }
 
-#lockScreen input {
-  background: black;
-  border: 1px solid #00ff00;
-  color: #00ff00;
-  padding: 10px;
-  font-size: 18px;
+#login, #stage2 {
+  position:absolute;
+  width:100%;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:2;
 }
 
-/* ترمینال */
-.overlay {
-  position: relative;
-  z-index: 1;
-  padding: 20px;
+input {
+  background:black;
+  border:1px solid #00ff00;
+  color:#00ff00;
+  padding:10px;
 }
 
-.hidden {
-  display: none;
+.hidden { display:none; }
+
+#main {
+  position:relative;
+  z-index:1;
+  padding:20px;
 }
 
 #terminal {
-  white-space: pre-line;
-  min-height: 80vh;
+  min-height:80vh;
+  white-space:pre-line;
 }
 
-#input-line {
-  display: flex;
-}
-
-#commandInput {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #00ff00;
-  width: 100%;
-}
-
-/* glitch */
 .glitch {
-  animation: glitch 0.2s infinite;
+  animation:glitch 0.2s infinite;
 }
 
 @keyframes glitch {
-  0% {transform: translate(0);}
-  25% {transform: translate(2px,-2px);}
-  50% {transform: translate(-2px,2px);}
-  75% {transform: translate(2px,2px);}
-  100% {transform: translate(0);}
+  0%{transform:0}
+  25%{transform:translate(2px,-2px)}
+  50%{transform:translate(-2px,2px)}
+  75%{transform:translate(2px,2px)}
 }
