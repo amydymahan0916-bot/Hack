@@ -1,137 +1,169 @@
-// ===== MATRIX BACKGROUND =====
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
-
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
+// ===== MATRIX =====
+const c = document.getElementById("matrix");
+const ctx = c.getContext("2d");
+c.width = innerWidth;
+c.height = innerHeight;
 
 const letters = "01ABCDEF";
 const fontSize = 14;
-const columns = canvas.width / fontSize;
+const cols = c.width / fontSize;
+const drops = Array(Math.floor(cols)).fill(1);
 
-const drops = Array(Math.floor(columns)).fill(1);
-
-function drawMatrix() {
+function draw() {
   ctx.fillStyle = "rgba(0,0,0,0.05)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0,0,c.width,c.height);
+  ctx.fillStyle="#0F0";
+  ctx.font=fontSize+"px monospace";
 
-  ctx.fillStyle = "#0F0";
-  ctx.font = fontSize + "px monospace";
-
-  for (let i = 0; i < drops.length; i++) {
-    const text = letters[Math.floor(Math.random() * letters.length)];
-    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
-      drops[i] = 0;
-
+  drops.forEach((y,i)=>{
+    const text = letters[Math.floor(Math.random()*letters.length)];
+    ctx.fillText(text,i*fontSize,y*fontSize);
+    if(y*fontSize>c.height && Math.random()>0.975) drops[i]=0;
     drops[i]++;
-  }
+  });
 }
+setInterval(draw,33);
 
-setInterval(drawMatrix, 33);
+// ===== ELEMENTS =====
+const loading = document.getElementById("loading");
+const login = document.getElementById("login");
+const stage2 = document.getElementById("stage2");
+const main = document.getElementById("main");
 
-// ===== LOGIN SYSTEM =====
-const passwordInput = document.getElementById("passwordInput");
-const lockScreen = document.getElementById("lockScreen");
-const mainUI = document.getElementById("mainUI");
+const pass = document.getElementById("pass");
+const code = document.getElementById("code");
 
-const PASSWORD = "1337"; // ← اینو عوض کن 😏
+const terminal = document.getElementById("terminal");
+const cmd = document.getElementById("cmd");
 
-passwordInput.addEventListener("keydown", function(e) {
-  if (e.key === "Enter") {
-    if (passwordInput.value === PASSWORD) {
-      lockScreen.style.display = "none";
-      mainUI.classList.remove("hidden");
-      boot();
+const sound = document.getElementById("typeSound");
+
+// ===== INIT =====
+setTimeout(()=>{
+  loading.style.display="none";
+
+  if(localStorage.getItem("auth") === "true"){
+    main.classList.remove("hidden");
+    boot();
+  } else {
+    login.classList.remove("hidden");
+  }
+
+},1500);
+
+// ===== LOGIN =====
+const PASSWORD = "1337";
+const CODE = "root";
+
+pass.addEventListener("keydown", e=>{
+  if(e.key==="Enter"){
+    if(pass.value===PASSWORD){
+      login.style.display="none";
+      stage2.classList.remove("hidden");
     } else {
-      passwordInput.value = "";
+      pass.value="";
       alert("ACCESS DENIED 💀");
     }
   }
 });
 
-// ===== TERMINAL =====
-const terminal = document.getElementById("terminal");
-const input = document.getElementById("commandInput");
+code.addEventListener("keydown", e=>{
+  if(e.key==="Enter"){
+    if(code.value.toLowerCase()===CODE){
+      stage2.style.display="none";
+      main.classList.remove("hidden");
+      localStorage.setItem("auth","true");
+      boot();
+    } else {
+      code.value="";
+      alert("WRONG CODE");
+    }
+  }
+});
 
-function boot() {
-  const lines = [
-    "Booting system...",
-    "Decrypting modules...",
+// ===== BOOT =====
+function boot(){
+  const lines=[
+    "Booting...",
+    "Loading modules...",
     "Access granted ✔",
-    "Welcome, Mahan 💀",
+    "Welcome Mahan 💀",
     "Type 'help'"
   ];
 
-  let i = 0;
-
-  function next() {
-    if (i < lines.length) {
-      terminal.innerHTML += lines[i] + "\n";
+  let i=0;
+  function next(){
+    if(i<lines.length){
+      terminal.innerHTML+=lines[i]+"\n";
       i++;
-      setTimeout(next, 500);
+      setTimeout(next,400);
     }
   }
-
   next();
 }
 
-input.addEventListener("keydown", function(e) {
-  if (e.key === "Enter") {
-    let cmd = input.value.trim().toLowerCase();
+// ===== TERMINAL =====
+cmd.addEventListener("keydown", e=>{
+  if(e.key==="Enter"){
+    let c = cmd.value.trim().toLowerCase();
 
-    terminal.innerHTML += "\n> " + cmd;
+    terminal.innerHTML+="\n> "+c;
+    playSound();
 
-    switch(cmd) {
+    switch(c){
       case "help":
-        terminal.innerHTML += "\nhelp, about, hack, glitch, secret";
+        terminal.innerHTML+="\nhelp about hack clear glitch scan exit";
         break;
 
       case "about":
-        terminal.innerHTML += "\nMahan | Elite Mode 💀";
+        terminal.innerHTML+="\nMahan | Cyber Elite 💀";
         break;
 
       case "hack":
-        hackEffect();
+        sequence(["Injecting...","Bypassing...","DONE 💀"]);
+        break;
+
+      case "scan":
+        sequence(["Scanning ports...","Open: 22,80,443","Done"]);
         break;
 
       case "glitch":
         document.body.classList.add("glitch");
-        setTimeout(() => {
-          document.body.classList.remove("glitch");
-        }, 800);
+        setTimeout(()=>document.body.classList.remove("glitch"),800);
         break;
 
-      case "secret":
-        terminal.innerHTML += "\nHidden message unlocked 🔓";
+      case "clear":
+        terminal.innerHTML="";
+        break;
+
+      case "exit":
+        localStorage.removeItem("auth");
+        location.reload();
         break;
 
       default:
-        terminal.innerHTML += "\nUnknown command...";
+        terminal.innerHTML+="\nUnknown command...";
     }
 
-    input.value = "";
+    cmd.value="";
   }
 });
 
-function hackEffect() {
-  const lines = [
-    "Connecting...",
-    "Injecting...",
-    "Breaching system...",
-    "DONE 💀"
-  ];
-
-  let i = 0;
-
-  function next() {
-    if (i < lines.length) {
-      terminal.innerHTML += "\n" + lines[i];
+function sequence(arr){
+  let i=0;
+  function next(){
+    if(i<arr.length){
+      terminal.innerHTML+="\n"+arr[i];
       i++;
-      setTimeout(next, 400);
+      setTimeout(next,400);
     }
   }
-
   next();
-    }
+}
+
+function playSound(){
+  if(sound){
+    sound.currentTime=0;
+    sound.play();
+  }
+  }
